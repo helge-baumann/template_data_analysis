@@ -1,0 +1,1 @@
+hier werden die Daten abgelegt, die untersucht und nicht verändert werden sollten. 
