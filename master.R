@@ -1,35 +1,28 @@
-##############################################################
-# Titel: Ziel der Analyse
-# Autor: 
-# Letztes Update: 17.02.2021
-##############################################################
+# functional programming / purrr Training
+# Helge Emmler
+# 19.10.2022
+# R 4.2.1, RStudio 2022.11.0 (daily build)
 
+# PrÃ¤ambel
+if(!"pacman" %in% installed.packages()[,1]) install.packages("pacman")
+library(pacman)
+p_load(haven, dplyr, stringr, tidyr, purrr, rlang)
 
-# Präambel: Pakete installieren
-  if(!("pacman" %in% installed.packages()[,1])) install.packages("pacman")
-  library(pacman)
+# Funktionen
+dir.create("functions", showWarnings=F)
+map(dir("functions", full.names=T), source, encoding = "UTF-8")
 
-  # p_load checkt, ob Paket installiert ist; wenn ja: direkt laden
-  p_load(haven, dplyr, ggplot2, tidyr, zoo, purrr, tibble, here)
-  
-  # here() setzt das Arbeitsverzeichnis an die Stelle des master-files.
-  # (Alternative: Projekt anlegen unter File --> New Project)
-  setwd(here())
+# Skripte durchlaufen lassen
+dirs <- cement(data, input, steps, info, sessioninfo) # cement: siehe "functions"
+map(dirs, dir.create, showWarnings = F); rm(dirs)
 
-  
-# Alle Unterdateien ausführen
+map(dir("steps", full.names=T), source, encoding = "UTF-8")
 
-  # selbstgeschriebene Funktionen
-  source("./Functions/functions.R", encoding="UTF-8")
-  
-  # alle Unterdateien im UNterordner "Steps" der Reihe nach ausführen
-  n <- 1:length(dir("./Steps"))
-  sapply(dir("./Steps", full.names=T)[n], source, encoding="UTF-8")
-
-  
-# sessionInfo (geladene Pakete etc. für Fehlersuche)
-  dir.create("./sessionInfo()", showWarnings=F)
-  writeLines(
-    capture.output(sessionInfo()), 
-    con=paste0("./sessionInfo()/", format(Sys.time(), "%y%m%d"), ".txt")
-  )
+# sessionInfo()
+writeLines(
+  capture.output(sessionInfo()), 
+  con=paste0(
+    "./sessioninfo/sessioninfo_", 
+    format(Sys.time(), "%y%m%d-%H%M%S"), 
+    ".txt")
+)
